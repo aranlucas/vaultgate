@@ -131,7 +131,7 @@ describe('createApp', () => {
       expect(response.status).toBe(401);
       expect(response.headers.get('www-authenticate')).toContain('resource_metadata=');
       expect(response.headers.get('content-security-policy')).toBeNull();
-      expect(await response.json()).toMatchObject({ error: 'invalid_token' });
+      expect(await response.text()).toBe('');
     }
     const metadata = await app.request(TEST_METADATA_URL, { headers: { accept: BROWSER_ACCEPT } });
     expect(metadata.status).toBe(200);

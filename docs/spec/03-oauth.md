@@ -160,6 +160,8 @@ scope, resource}` with `Cache-Control: no-store`.
 - **OAUTH-33** Insufficient scope → `403` with
   `WWW-Authenticate: Bearer error="insufficient_scope", scope="<all scopes the operation needs>",
 resource_metadata="…", error_description="…"`, emitted in one challenge, never incrementally.
+  If the deployment disables a scope required for the operation, the `403` reports that the tool
+  is disabled and omits the challenge, since reauthorization cannot grant that scope.
 - **OAUTH-34** vaultgate MUST NOT accept any token it did not issue (no JWTs, no upstream IdP
   tokens) and MUST NOT forward the bearer token anywhere (the `bw serve` session is a separate,
   internal credential).
