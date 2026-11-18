@@ -35,10 +35,13 @@ export async function authenticate(
 ): Promise<BearerVerdict | Response> {
   const header = headers.get('authorization');
   if (header === null) {
-    return unauthorizedResponse(
-      missingTokenChallenge(resourceMetadataUrl),
-      'a bearer token is required',
-    );
+    return new Response(null, {
+      status: 401,
+      headers: {
+        'WWW-Authenticate': missingTokenChallenge(resourceMetadataUrl),
+        'Cache-Control': 'no-store',
+      },
+    });
   }
   const raw = bearerToken(header);
   if (raw === undefined) {

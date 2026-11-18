@@ -159,6 +159,13 @@ function toolCallGate(
   const tool = call.data.params.name;
   if (!isRequirementMet(requirement, verdict.scopes)) {
     recordDenied(gate, context, verdict, tool);
+    if (!isRequirementMet(requirement, enabledScopes(gate.dependencies.config))) {
+      return context.json(
+        { error: 'forbidden', error_description: 'the tool is disabled by server configuration' },
+        403,
+        { 'Cache-Control': 'no-store' },
+      );
+    }
     const listed = requirement.scopes.join(' ');
     const description = `${tool} requires ${requirement.mode === 'any' ? 'any of ' : ''}${listed}`;
     const challenge = insufficientScopeChallenge(gate.metadataUrl, requirement.scopes, description);

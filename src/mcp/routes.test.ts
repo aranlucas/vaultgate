@@ -60,6 +60,12 @@ describe('POST /mcp protocol surface', () => {
     expect(names).toContain('get_secret');
     const outcome = await callTool(app, 'trash_item', { item_id: 'item-login' }, { token });
     expect(outcome.status).toBe(403);
+    expect(outcome.headers.get('www-authenticate')).toBeNull();
+    expect(outcome.headers.get('cache-control')).toBe('no-store');
+    expect(JSON.parse(outcome.text)).toStrictEqual({
+      error: 'forbidden',
+      error_description: 'the tool is disabled by server configuration',
+    });
   });
 
   it('MCP-6 every listed tool declares input and output schemas and an LLM-facing description', async () => {

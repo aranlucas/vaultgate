@@ -14,6 +14,8 @@ describe('POST /mcp bearer handling', () => {
     const response = await postJsonRpc(app, initializeRequest());
     expect(response.status).toBe(401);
     expect(response.headers.get('www-authenticate')).toBe(missingTokenChallenge(TEST_METADATA_URL));
+    expect(response.headers.get('cache-control')).toBe('no-store');
+    expect(response.text).toBe('');
     expect(response.headers.get('access-control-allow-origin')).toBe('*');
     expect(response.headers.get('access-control-expose-headers')).toBe(
       'WWW-Authenticate,Mcp-Session-Id',
